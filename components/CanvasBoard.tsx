@@ -246,7 +246,7 @@ export const CanvasBoard = forwardRef<CanvasBoardHandle, CanvasBoardProps>(funct
       const zoom = canvas.getZoom();
       const delta = -nativeEvent.deltaY;
       const zoomFactor = Math.min(Math.max(zoom + delta / 500, 0.5), 4);
-      canvas.zoomToPoint({ x: nativeEvent.offsetX, y: nativeEvent.offsetY }, zoomFactor);
+      canvas.zoomToPoint(new fabric.Point(nativeEvent.offsetX, nativeEvent.offsetY), zoomFactor);
       nativeEvent.preventDefault();
       nativeEvent.stopPropagation();
     };
