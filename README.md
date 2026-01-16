@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CollabCanvas Pro
 
-## Getting Started
+Real-time collaborative whiteboard MVP with anonymous rooms, live cursors, chat, and voice. Fabric.js drawing is synced over Socket.io with in-memory room state.
 
-First, run the development server:
+## Features
+
+- Anonymous rooms via shareable URL (UUID)
+- Real-time drawing sync, cursors, chat, and voice
+- Undo/redo and export to PNG
+- In-memory canvas state for active sessions
+- Tailwind UI with keyboard-accessible tools
+- Mobile/touch-ready drawing surface
+
+## Tech Stack
+
+- Next.js 14+ (App Router) + TypeScript
+- Fabric.js for canvas drawing
+- Socket.io for realtime events
+- Zustand for tool state
+- Tailwind CSS via PostCSS
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_SOCKET_URL` (optional): Point the client to an external Socket.io server.
+  - Example: `https://collabcanvas-pro-socket.fly.dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Vercel Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vercel supports Next.js hosting but **does not support long-lived WebSocket servers** in serverless functions. For realtime collaboration, you have two options:
 
-## Deploy on Vercel
+1) **Deploy frontend to Vercel**, and run the Socket.io server on a Node-friendly platform (Render, Fly.io, Railway, DigitalOcean).
+   - Set `NEXT_PUBLIC_SOCKET_URL` on Vercel to the Socket.io server URL.
+2) **Deploy the full app to a Node host** and run `server.ts` directly.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deploy steps (Vercel)
+1. `vercel` → follow prompts.
+2. Add `NEXT_PUBLIC_SOCKET_URL` in Vercel Project Settings if using a separate socket server.
+3. Redeploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Troubleshooting
+
+- **No realtime updates on Vercel**: WebSockets are not supported on Vercel serverless. Use a separate Socket.io server and set `NEXT_PUBLIC_SOCKET_URL`.
+- **CORS errors**: Ensure the socket server allows the Vercel origin.
+- **Share button fails**: Some browsers block clipboard access without user interaction.
+
+## Testing Notes
+
+```bash
+npm run test
+```
+
+Add Cypress end-to-end tests for drawing, chat, and reconnect flows when expanding coverage.
+# collabCanvas-pro
